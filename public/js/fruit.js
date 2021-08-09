@@ -1894,6 +1894,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -1931,59 +1937,42 @@ var FruitsList = /*#__PURE__*/function (_Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      fruits: []
+      fruits: [],
+      fruit: {
+        name: '',
+        size: '',
+        color: ''
+      }
     };
+    _this.handleChangeFruit = _this.handleChangeFruit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(FruitsList, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.fetchFruits();
-    }
-  }, {
-    key: "fetchFruits",
-    value: function fetchFruits() {
-      var _this2 = this;
-
-      axios.get('/api/fruits').then(function (response) {
-        _this2.setState({
-          fruits: response.data
-        });
-      })["catch"](function (error) {
-        alert("Error " + error);
-      });
-    }
-  }, {
-    key: "handleEdit",
-    value: function handleEdit(id) {
-      console.log(id);
-    }
-  }, {
-    key: "handleDelete",
-    value: function handleDelete(id) {
-      var _this3 = this;
-
-      axios["delete"]("/api/fruits/".concat(id)).then(function (response) {
-        _this3.fetchFruits();
-      })["catch"](function (error) {
-        alert("Error " + error);
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      var _this2 = this;
+
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "container",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "row justify-content-center",
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "col-md-8",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
               className: "card",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                 className: "card-header",
-                children: "CRUD de Frutas"
+                children: ["CRUD de Frutas", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                  className: "btn btn-primary col-md-4",
+                  type: "button",
+                  "data-toggle": "modal",
+                  onClick: function onClick() {
+                    return _this2.openCreateModalFruit();
+                  },
+                  "data-target": "#exampleModal",
+                  children: "Crear producto"
+                })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
                 className: "card-body",
                 children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("table", {
@@ -2008,13 +1997,168 @@ var FruitsList = /*#__PURE__*/function (_Component) {
               })]
             })
           })
-        })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+            className: "modal fade",
+            id: "exampleModal",
+            role: "dialog",
+            "aria-labelledby": "exampleModalLabel",
+            "aria-hidden": "true",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+              className: "modal-dialog",
+              role: "document",
+              children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                className: "modal-content",
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "modal-header",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h5", {
+                    className: "modal-title",
+                    id: "exampleModalLabel",
+                    children: "A\xF1adir Fruta"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                    type: "button",
+                    className: "close",
+                    "data-dismiss": "modal",
+                    "aria-label": "Close",
+                    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+                      "aria-hidden": "true",
+                      children: "\xD7"
+                    })
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "modal-body",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                    className: "form-group",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                      children: "Nombre"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                      name: "name",
+                      type: "text",
+                      className: "form-control",
+                      value: this.state.fruit.name,
+                      onChange: this.handleChangeFruit
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                    className: "form-group",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                      children: "Tama\xF1o"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                      name: "size",
+                      type: "text",
+                      className: "form-control",
+                      value: this.state.fruit.size,
+                      onChange: this.handleChangeFruit
+                    })]
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                    className: "form-group",
+                    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+                      children: "Color"
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                      name: "color",
+                      type: "text",
+                      className: "form-control",
+                      value: this.state.fruit.color,
+                      onChange: this.handleChangeFruit
+                    })]
+                  })]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                  className: "modal-footer",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                    type: "button",
+                    className: "btn btn-secondary",
+                    "data-dismiss": "modal",
+                    children: "Cancelar"
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                    type: "button",
+                    className: "btn btn-primary",
+                    onClick: function onClick() {
+                      return _this2.handleSubmit();
+                    },
+                    children: "Guardar"
+                  })]
+                })]
+              })
+            })
+          })
+        })]
       });
+    }
+  }, {
+    key: "handleChangeFruit",
+    value: function handleChangeFruit(event) {
+      var field = event.target.name;
+
+      var fruit = _objectSpread({}, this.state.fruit);
+
+      fruit[field] = event.target.value;
+      this.setState({
+        fruit: _objectSpread({}, fruit)
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.fetchFruits();
+    }
+  }, {
+    key: "fetchFruits",
+    value: function fetchFruits() {
+      var _this3 = this;
+
+      axios.get('/api/fruits').then(function (res) {
+        _this3.setState({
+          fruits: res.data
+        });
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      var _this4 = this;
+
+      axios.post('/api/fruits', this.state.fruit).then(function (res) {
+        $("#exampleModal").modal("hide");
+
+        _this4.fetchFruits();
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
+  }, {
+    key: "handleEdit",
+    value: function handleEdit(id) {
+      console.log(id);
+    }
+  }, {
+    key: "handleDelete",
+    value: function handleDelete(id) {
+      var _this5 = this;
+
+      axios["delete"]("/api/fruits/".concat(id)).then(function (res) {
+        _this5.fetchFruits();
+      })["catch"](function (error) {
+        alert("Error " + error);
+      });
+    }
+  }, {
+    key: "openCreateModalFruit",
+    value: function openCreateModalFruit() {
+      var fruit = {
+        name: "",
+        size: "",
+        color: ""
+      };
+      this.setState({
+        fruit: _objectSpread({}, fruit)
+      });
+      $("#exampleModal").modal("hide");
     }
   }, {
     key: "renderFruitsList",
     value: function renderFruitsList() {
-      var _this4 = this;
+      var _this6 = this;
 
       return this.state.fruits.map(function (data) {
         return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
@@ -2042,14 +2186,14 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                   className: "dropdown-item",
                   type: "button",
                   onClick: function onClick() {
-                    return _this4.handleEdit(data.id);
+                    return _this6.handleEdit(data.id);
                   },
                   children: "Editar"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
                   className: "dropdown-item",
                   type: "button",
                   onClick: function onClick() {
-                    return _this4.handleDelete(data.id);
+                    return _this6.handleDelete(data.id);
                   },
                   children: "Eliminar"
                 })]
