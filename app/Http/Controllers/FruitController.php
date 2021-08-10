@@ -9,9 +9,19 @@ use App\Http\Resources\FruitResource;
 
 class FruitController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $fruits = Fruit::orderBy('id', 'desc')->get();
+        $query = Fruit::query();
+
+        if ($name = $request->name) {
+            $query->where('name','like',"%$name%");
+        }
+
+        if ($request->size !== null) {
+            $query->where('size', $request->size);   
+        }
+
+        $fruits = $query->orderBy('id', 'desc')->get();
         $fruits_collect = FruitResource::collection($fruits);
 
         return response()->json($fruits_collect);
@@ -28,7 +38,7 @@ class FruitController extends Controller
         return response()->json($fruit);
     }
 
-    public function update(Request $request, Fruit $fruit)
+    public function update(FruitRequest $request, Fruit $fruit)
     {
         $fruit->update($request->all());
         return response()->json($fruit);

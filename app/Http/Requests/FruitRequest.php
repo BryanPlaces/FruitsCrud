@@ -40,7 +40,23 @@ class FruitRequest extends FormRequest
             }
             case 'PUT':
             case 'PATCH':
+            {
+                return [
+                    'name'=>'min:1',
+                    'size'=>'integer|between:0,2',
+                ];
+            }
             default:break;
         }
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'El nombre es requerido',
+            'size.required' => 'El tamaño es requerido',
+            'name.min' => 'El campo nombre no puede estar vacio',
+            'size.integer' => 'Debe seleccionar un tamaño para continuar',
+        ];
     }
 }
