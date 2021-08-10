@@ -35,7 +35,6 @@ class FruitRequest extends FormRequest
                 return [
                     'name'=>'required|string',
                     'size'=>'required|integer|between:0,2',
-                    'color'=>'required|string',
                 ];
             }
             case 'PUT':

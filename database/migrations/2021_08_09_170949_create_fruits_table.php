@@ -17,7 +17,7 @@ class CreateFruitsTable extends Migration
             $table->id();
             $table->text('name');
             $table->integer('size');
-            $table->text('color');
+            $table->text('color')->nullable();
             $table->timestamps();
         });
     }
