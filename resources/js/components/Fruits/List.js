@@ -11,7 +11,13 @@ export default class FruitsList extends Component {
         name:'',
         size: '',
         color: '',
-      }
+      },
+      sizes: [
+        {id: '', name: 'Seleccionar tamaño'},
+        {id: 0, name: 'Pequeño'},
+        {id: 1, name: 'Mediano'},
+        {id: 2, name: 'Grande'},
+      ],
     }
 
     this.handleChangeFruit = this.handleChangeFruit.bind(this);
@@ -30,7 +36,7 @@ export default class FruitsList extends Component {
                   type="button"
                   data-toggle="modal"
                   onClick={() => this.openCreateModalFruit()}
-                  data-target="#exampleModal"
+                  data-target="#fruitModal"
                 >
                   Crear producto
                 </button>
@@ -47,7 +53,23 @@ export default class FruitsList extends Component {
                     </tr>
                   </thead>
                   <tbody id="bodytable">
-                    {this.renderFruitsList()}
+                    {this.state.fruits.map(data =>
+                      <tr key={data.id}>
+                        <td>{data.name}</td>
+                        <td>{data.size_text}</td>
+                        <td><button type="button" className="btn btn-circle btn-lg" style={{backgroundColor:data.color}} /></td>
+                        <td>
+                          <div className="dropdown">
+                            <button className="btn btn-secondary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" />
+                            
+                            <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a className="dropdown-item" type="button" onClick={() => this.handleEdit(data.id)}>Editar</a>
+                              <a className="dropdown-item" type="button" onClick={() => this.handleDelete(data.id)}>Eliminar</a>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -56,11 +78,11 @@ export default class FruitsList extends Component {
         </div>
 
         <form>
-          <div className="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal fade" id="fruitModal" role="dialog" aria-labelledby="fruitModalLabel" aria-hidden="true">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">Añadir Fruta</h5>
+                  <h5 className="modal-title" id="fruitModalLabel">Añadir Fruta</h5>
                   <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                   </button>
@@ -72,11 +94,15 @@ export default class FruitsList extends Component {
                   </div>
                   <div className="form-group">
                    <label>Tamaño</label>
-                   <input name="size" type="text" className="form-control" value={this.state.fruit.size} onChange={this.handleChangeFruit} />
+                   <select name="size" className="form-control" value={this.state.fruit.size} onChange={this.handleChangeFruit}>
+                     { this.state.sizes.map(size =>
+                      <option key={size.id} value={size.id}>{size.name}</option>
+                     )}
+                    </select>
                   </div>
                   <div className="form-group">
                    <label>Color</label>
-                   <input name="color" type="text" className="form-control" value={this.state.fruit.color} onChange={this.handleChangeFruit} />
+                   <input name="color" type="color" className="form-control form-control-color" value={this.state.fruit.color} onChange={this.handleChangeFruit} />
                   </div>
                 </div>
                 <div className="modal-footer">
@@ -113,9 +139,28 @@ export default class FruitsList extends Component {
   }
 
   handleSubmit() {
+    if (this.state.fruit.id) {
+      this.handleUpdate();
+    }else{
+      this.handleCreate();
+    }
+  }
+
+  handleCreate() {
     axios.post('/api/fruits', this.state.fruit)
       .then(res => {
-        $("#exampleModal").modal("hide");
+        $("#fruitModal").modal("hide");
+        this.fetchFruits();
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
+
+  handleUpdate() {
+    axios.patch(`/api/fruits/${this.state.fruit.id}`, this.state.fruit)
+      .then(res => {
+        $("#fruitModal").modal("hide");
         this.fetchFruits();
       })
       .catch(e => {
@@ -124,7 +169,9 @@ export default class FruitsList extends Component {
   }
 
   handleEdit(id) {
-    console.log(id);
+    const fruit = this.state.fruits.find(x => x.id === id);
+    this.setState({ fruit: {...fruit}});
+    $("#fruitModal").modal("show");
   }
 
   handleDelete(id) {
@@ -136,38 +183,14 @@ export default class FruitsList extends Component {
     })
   }
 
-
   openCreateModalFruit() {
     const fruit = {
       name:"",
       size:"",
-      color:"",
+      color:"#000000",
     };
     this.setState({fruit: {...fruit}});
-    $("#exampleModal").modal("hide");
-  }
-
-  renderFruitsList() {
-    return this.state.fruits.map((data)=>{
-      return(
-        <tr key={data.id}>
-          <td>{data.name}</td>
-          <td>{data.size_text}</td>
-          <td>{data.color}</td>
-          <td>
-            <div className="dropdown">
-              <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                test
-              </button>
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a className="dropdown-item" type="button" onClick={() => this.handleEdit(data.id)}>Editar</a>
-                <a className="dropdown-item" type="button" onClick={() => this.handleDelete(data.id)}>Eliminar</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-      )
-    })
+    $("#fruitModal").modal("hide");
   }
 }
 if (document.getElementById('fruit')) {

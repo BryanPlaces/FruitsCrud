@@ -1942,7 +1942,20 @@ var FruitsList = /*#__PURE__*/function (_Component) {
         name: '',
         size: '',
         color: ''
-      }
+      },
+      sizes: [{
+        id: '',
+        name: 'Seleccionar tamaño'
+      }, {
+        id: 0,
+        name: 'Pequeño'
+      }, {
+        id: 1,
+        name: 'Mediano'
+      }, {
+        id: 2,
+        name: 'Grande'
+      }]
     };
     _this.handleChangeFruit = _this.handleChangeFruit.bind(_assertThisInitialized(_this));
     return _this;
@@ -1970,7 +1983,7 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                   onClick: function onClick() {
                     return _this2.openCreateModalFruit();
                   },
-                  "data-target": "#exampleModal",
+                  "data-target": "#fruitModal",
                   children: "Crear producto"
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
@@ -1991,7 +2004,53 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                     })
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("tbody", {
                     id: "bodytable",
-                    children: this.renderFruitsList()
+                    children: this.state.fruits.map(function (data) {
+                      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
+                        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: data.name
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: data.size_text
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                            type: "button",
+                            className: "btn btn-circle btn-lg",
+                            style: {
+                              backgroundColor: data.color
+                            }
+                          })
+                        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
+                          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                            className: "dropdown",
+                            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
+                              className: "btn btn-secondary btn-lg dropdown-toggle",
+                              type: "button",
+                              id: "dropdownMenuButton",
+                              "data-toggle": "dropdown",
+                              "aria-haspopup": "true",
+                              "aria-expanded": "false"
+                            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
+                              className: "dropdown-menu",
+                              "aria-labelledby": "dropdownMenuButton",
+                              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                                className: "dropdown-item",
+                                type: "button",
+                                onClick: function onClick() {
+                                  return _this2.handleEdit(data.id);
+                                },
+                                children: "Editar"
+                              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
+                                className: "dropdown-item",
+                                type: "button",
+                                onClick: function onClick() {
+                                  return _this2.handleDelete(data.id);
+                                },
+                                children: "Eliminar"
+                              })]
+                            })]
+                          })
+                        })]
+                      }, data.id);
+                    })
                   })]
                 })
               })]
@@ -2000,9 +2059,9 @@ var FruitsList = /*#__PURE__*/function (_Component) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("form", {
           children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
             className: "modal fade",
-            id: "exampleModal",
+            id: "fruitModal",
             role: "dialog",
-            "aria-labelledby": "exampleModalLabel",
+            "aria-labelledby": "fruitModalLabel",
             "aria-hidden": "true",
             children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
               className: "modal-dialog",
@@ -2013,7 +2072,7 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                   className: "modal-header",
                   children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h5", {
                     className: "modal-title",
-                    id: "exampleModalLabel",
+                    id: "fruitModalLabel",
                     children: "A\xF1adir Fruta"
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
                     type: "button",
@@ -2042,12 +2101,17 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                     className: "form-group",
                     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
                       children: "Tama\xF1o"
-                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
+                    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
                       name: "size",
-                      type: "text",
                       className: "form-control",
                       value: this.state.fruit.size,
-                      onChange: this.handleChangeFruit
+                      onChange: this.handleChangeFruit,
+                      children: this.state.sizes.map(function (size) {
+                        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
+                          value: size.id,
+                          children: size.name
+                        }, size.id);
+                      })
                     })]
                   }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
                     className: "form-group",
@@ -2055,8 +2119,8 @@ var FruitsList = /*#__PURE__*/function (_Component) {
                       children: "Color"
                     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                       name: "color",
-                      type: "text",
-                      className: "form-control",
+                      type: "color",
+                      className: "form-control form-control-color",
                       value: this.state.fruit.color,
                       onChange: this.handleChangeFruit
                     })]
@@ -2116,10 +2180,19 @@ var FruitsList = /*#__PURE__*/function (_Component) {
   }, {
     key: "handleSubmit",
     value: function handleSubmit() {
+      if (this.state.fruit.id) {
+        this.handleUpdate();
+      } else {
+        this.handleCreate();
+      }
+    }
+  }, {
+    key: "handleCreate",
+    value: function handleCreate() {
       var _this4 = this;
 
       axios.post('/api/fruits', this.state.fruit).then(function (res) {
-        $("#exampleModal").modal("hide");
+        $("#fruitModal").modal("hide");
 
         _this4.fetchFruits();
       })["catch"](function (e) {
@@ -2127,17 +2200,36 @@ var FruitsList = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "handleUpdate",
+    value: function handleUpdate() {
+      var _this5 = this;
+
+      axios.patch("/api/fruits/".concat(this.state.fruit.id), this.state.fruit).then(function (res) {
+        $("#fruitModal").modal("hide");
+
+        _this5.fetchFruits();
+      })["catch"](function (e) {
+        console.log(e);
+      });
+    }
+  }, {
     key: "handleEdit",
     value: function handleEdit(id) {
-      console.log(id);
+      var fruit = this.state.fruits.find(function (x) {
+        return x.id === id;
+      });
+      this.setState({
+        fruit: _objectSpread({}, fruit)
+      });
+      $("#fruitModal").modal("show");
     }
   }, {
     key: "handleDelete",
     value: function handleDelete(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       axios["delete"]("/api/fruits/".concat(id)).then(function (res) {
-        _this5.fetchFruits();
+        _this6.fetchFruits();
       })["catch"](function (error) {
         alert("Error " + error);
       });
@@ -2148,60 +2240,12 @@ var FruitsList = /*#__PURE__*/function (_Component) {
       var fruit = {
         name: "",
         size: "",
-        color: ""
+        color: "#000000"
       };
       this.setState({
         fruit: _objectSpread({}, fruit)
       });
-      $("#exampleModal").modal("hide");
-    }
-  }, {
-    key: "renderFruitsList",
-    value: function renderFruitsList() {
-      var _this6 = this;
-
-      return this.state.fruits.map(function (data) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("tr", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-            children: data.name
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-            children: data.size_text
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-            children: data.color
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("td", {
-            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-              className: "dropdown",
-              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
-                className: "btn btn-secondary dropdown-toggle",
-                type: "button",
-                id: "dropdownMenuButton",
-                "data-toggle": "dropdown",
-                "aria-haspopup": "true",
-                "aria-expanded": "false",
-                children: "test"
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-                className: "dropdown-menu",
-                "aria-labelledby": "dropdownMenuButton",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-                  className: "dropdown-item",
-                  type: "button",
-                  onClick: function onClick() {
-                    return _this6.handleEdit(data.id);
-                  },
-                  children: "Editar"
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
-                  className: "dropdown-item",
-                  type: "button",
-                  onClick: function onClick() {
-                    return _this6.handleDelete(data.id);
-                  },
-                  children: "Eliminar"
-                })]
-              })]
-            })
-          })]
-        }, data.id);
-      });
+      $("#fruitModal").modal("hide");
     }
   }]);
 
